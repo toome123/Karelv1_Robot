@@ -39,6 +39,15 @@
 #include <Ultrasonic.h>
 
 //////////////////////////////////////////////////////////////////////////
+// RGB LED indicator
+//////////////////////////////////////////////////////////////////////////
+#define GREEN_LED 3
+#define BLUE_LED 11
+#define RED_LED 10
+//uncomment this line if using a Common Anode LED
+//#define COMMON_ANODE
+
+//////////////////////////////////////////////////////////////////////////
 // Small distance sensor pin index.
 //////////////////////////////////////////////////////////////////////////
 #define SENSOR_LEFT  6
@@ -104,7 +113,16 @@ void setup()
   // Initialize the digital pin as an output.
   pinMode(SENSOR_LEFT , INPUT);
   pinMode(SENSOR_RIGHT, INPUT);
-  
+  pinMode(RED_LED, OUTPUT);
+  pinMode(GREEN_LED, OUTPUT);
+  pinMode(BLUE_LED, OUTPUT); 
+  setColor(255,0,0);
+  delay(500);
+  setColor(0,0,0);
+  delay(500);
+  setColor(255,0,0);
+  delay(500);
+  setColor(0,0,0);
   // Create with the default frequency 1.6KHz.
   MotorShield.begin();
   //MotorShield.begin(1000);  // OR with a different frequency, say 1KHz
@@ -410,3 +428,15 @@ void TranslateBackwardCB()
   MotorRight->onestep(BACKWARD, MICROSTEP);
 }
 
+void setColor(int red, int green, int blue)
+{
+  #ifdef COMMON_ANODE
+    red = 255 - red;
+    green = 255 - green;
+    blue = 255 - blue;
+  #endif
+  analogWrite(redPin, red);
+  analogWrite(greenPin, green);
+  analogWrite(bluePin, blue);
+
+}
